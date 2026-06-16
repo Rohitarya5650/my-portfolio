@@ -1,10 +1,23 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Portfolio</title>
-    
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -227,14 +240,14 @@
       }
 
       #sec-one {
-        background-image: url("https://i.pinimg.com/1200x/17/a7/3c/17a73c821c277caea0d29778c82c31a1.jpg");
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+          url("https://i.pinimg.com/1200x/17/a7/3c/17a73c821c277caea0d29778c82c31a1.jpg");
         background-size: cover;
-        background-position: right center;
+        background-position: center;
+        background-attachment: fixed;
         height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 20px;
+        position: relative;
       }
       #sec-one .one-container {
         max-width: 1200px;
@@ -320,6 +333,12 @@
         position: relative;
         z-index: 1;
         overflow: hidden;
+        transition: all 0.4s ease;
+      }
+
+      #services .service-item:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
       }
 
       #services .service-item::after {
@@ -373,6 +392,11 @@
         margin: 20px auto;
         overflow: hidden;
         border-radius: 10px;
+        transition: 0.4s;
+      }
+
+      #projects .project-item:hover {
+        transform: translateY(-10px);
       }
 
       #projects .project-info {
@@ -460,6 +484,18 @@
         color: white;
         background-color: black;
       }
+      /* new button code  */
+      .btn {
+        border: 2px solid #1e90ff;
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.4);
+      }
+
+      .btn:hover {
+        background: #1e90ff;
+        box-shadow: 0 0 25px #1e90ff;
+        transform: translateY(-4px);
+      }
+
       #about .col-left .about-img {
         height: 100%;
         width: 100%;
@@ -743,6 +779,9 @@
     </style>
   </head>
   <body>
+    <div class="bg-animation"></div>
+
+    <div class="scroll-bar"></div>
     <!-- Custom Cursor -->
     <div class="cursor"></div>
 
@@ -771,20 +810,50 @@
     </section>
 
     <section id="sec-one">
+      <div class="hero-overlay"></div>
+
       <div class="one-container">
-        <div class="one-container-name">
-          <h1>Hello, My Name is <span></span></h1>
-          <h1>Rohit Arya <span></span></h1>
-          <h1>Web developer <span></span></h1>
-          <a
-            href="https://forms.gle/NfR9AT6ayfiFMErz5"
-            type="button"
-            class="btn"
-            >Hire Me</a
-          >
+        <div class="left-hero" data-aos="fade-right">
+          <p class="mini-title">HELLO I'M</p>
+
+          <h1>ROHIT ARYA</h1>
+
+          <h2>
+            I'M A
+            <span class="typing"></span>
+          </h2>
+
+          <p class="hero-description">
+            Passionate Frontend Developer creating modern, responsive and
+            futuristic websites with smooth animations and premium user
+            experience.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#projects" class="hero-btn primary-btn"> View Projects </a>
+
+            <a href="#contact" class="hero-btn secondary-btn"> Contact Me </a>
+          </div>
+
+          <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- <div class="right-hero" data-aos="fade-left">
+          <div class="hero-image-wrapper">
+            <img
+              src="./images/Gemini_Generated_Image_v8m8c5v8m8c5v8m8.png"
+              alt="profile"
+            />
+          </div> -->
         </div>
       </div>
     </section>
+
     <section id="services">
       <div class="services-container">
         <div class="service-top">
@@ -901,19 +970,14 @@
               <h1>LOGIN PAGE</h1>
               <h2>ROHIT ARYA</h2>
               <p>
-                This Login Page project provides a secure interface for user
-                authentication. It includes input validation, password
-                protection, and a clean, responsive design that works smoothly
-                on all devices. The system verifies user credentials before
-                granting access, ensuring data security. It demonstrates UI
-                development, form handling, and basic security implementation in
-                web or software applications..
+                Infino is a modern business website inspired by DotSquare,
+                featuring clean UI, responsive design, and well-structured
+                layouts. It showcases professional web development skills with a
+                focus on performance, usability, and user experience.
               </p>
             </div>
             <div class="project-image">
-              <img
-                src="https://i.pinimg.com/736x/fb/80/63/fb8063978783344291bfc27bc11fd109.jpg"
-              />
+              <img src="./images/infino website image.png" />
             </div>
           </div>
           <div class="project-item">
@@ -976,7 +1040,7 @@
             <div class="contact-info">
               <h1>Email</h1>
               <h2>Rohitarya56508@gmail.com</h2>
-              <h2>rohitarya.globle.org.in</h2>
+              <h2>rohitarya.xyz</h2>
             </div>
           </div>
           <div class="contact-item">
@@ -987,8 +1051,8 @@
             </div>
             <div class="contact-info">
               <h1>phone</h1>
-              <h2>+917678788987</h2>
-              <h2>+917786657698</h2>
+              <h2>+916367868970</h2>
+              <h2>+9100000 00000</h2>
             </div>
           </div>
 
