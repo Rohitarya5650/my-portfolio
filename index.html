@@ -382,9 +382,12 @@
       <div class="contact-container">
         <form
           class="contact-form"
-          action="https://formspree.io/f/mqpzqlgl"
+          id="contactForm"
+          action="7627a8c8-c3c2-4601-a299-d786a169c75a"
           method="POST"
         >
+          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY" />
+
           <input type="text" name="name" placeholder="Your Name" required />
 
           <input type="email" name="email" placeholder="Your Email" required />
@@ -397,7 +400,11 @@
             required
           ></textarea>
 
-          <button type="submit" class="btn primary-btn">Send Message</button>
+          <p id="formStatus"></p>
+
+          <button type="submit" class="btn primary-btn" id="submitBtn">
+            Send Message
+          </button>
         </form>
       </div>
     </section>
@@ -491,6 +498,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <script src="script.js"></script>
-    
   </body>
 </html>

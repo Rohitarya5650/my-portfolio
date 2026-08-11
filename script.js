@@ -447,15 +447,48 @@ link.classList.add("active");
 // CONTACT FORM DEMO
 // ============================
 
-const form = document.querySelector(".contact-form");
+const form = document.getElementById("contactForm");
+const status = document.getElementById("formStatus");
+const submitBtn = document.getElementById("submitBtn");
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+if (form) {
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  alert("Message Sent Successfully 🚀");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
 
-  form.reset();
-});
+    status.textContent = "";
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      if (response.ok) {
+        status.textContent = "Message sent successfully! 🚀";
+        form.reset();
+      } else {
+        status.textContent =
+          "Message send nahi hua. Please try again.";
+      }
+    } catch (error) {
+      console.error("Form error:", error);
+
+      status.textContent =
+        "Something went wrong. Please try again.";
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Send Message";
+  });
+}
 
 // ============================
 // PRELOADER OPTIONAL
