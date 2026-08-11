@@ -447,25 +447,15 @@ link.classList.add("active");
 // CONTACT FORM DEMO
 // ============================
 
-const form =
-document.querySelector(
-".contact-form"
-);
+const form = document.querySelector(".contact-form");
 
-form.addEventListener(
-"submit",
-(e)=>{
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-e.preventDefault();
+  alert("Message Sent Successfully 🚀");
 
-alert(
-"Message Sent Successfully 🚀"
-);
-
-form.reset();
-
-}
-);
+  form.reset();
+});
 
 // ============================
 // PRELOADER OPTIONAL

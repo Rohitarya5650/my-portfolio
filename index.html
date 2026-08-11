@@ -299,7 +299,6 @@
             </p>
             <div class="project-buttons">
               <a href="https://cspcoachingkuchamancity.com/">Live Demo</a>
-              
             </div>
           </div>
         </div>
@@ -316,7 +315,6 @@
             </p>
             <div class="project-buttons">
               <a href="#">Live Demo</a>
-              
             </div>
           </div>
         </div>
@@ -338,7 +336,6 @@
             </p>
             <div class="project-buttons">
               <a href="https://infinoappdevelopment.com/">Live Demo</a>
-              
             </div>
           </div>
         </div>
@@ -354,8 +351,9 @@
               visitors a smooth browsing experience.
             </p>
             <div class="project-buttons">
-              <a href="https://dharmendra-portfolio-web.netlify.app/">Live Demo</a>
-              
+              <a href="https://dharmendra-portfolio-web.netlify.app/"
+                >Live Demo</a
+              >
             </div>
           </div>
         </div>
@@ -366,7 +364,6 @@
             <p>Professional company website with premium design.</p>
             <div class="project-buttons">
               <a href="#">Live Demo</a>
-              
             </div>
           </div>
         </div>
@@ -383,14 +380,16 @@
       </div>
 
       <div class="contact-container">
-        <form class="contact-form">
-          <input type="text" placeholder="Your Name" required />
+        <form class="contact-form" action="https://formspree.io/f/mqpzqlgl" method="POST">
+          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY" />
 
-          <input type="email" placeholder="Your Email" required />
+          <input type="text" name="name" placeholder="Your Name" required />
 
-          <input type="text" placeholder="Subject" required />
+          <input type="email" name="email" placeholder="Your Email" required />
 
-          <textarea placeholder="Your Message" required></textarea>
+          <input type="text" name="subject" placeholder="Subject" required />
+
+          <textarea name="message" placeholder="Your Message" required ></textarea>
 
           <button type="submit" class="btn primary-btn">Send Message</button>
         </form>
@@ -486,5 +485,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </body>
 </html>
