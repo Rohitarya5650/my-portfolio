@@ -451,44 +451,48 @@ const form = document.getElementById("contactForm");
 const status = document.getElementById("formStatus");
 const submitBtn = document.getElementById("submitBtn");
 
-if (form) {
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Sending...";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending...";
+  status.textContent = "";
 
-    status.textContent = "";
+  try {
+    const formData = new FormData(form);
 
-    try {
-      const formData = new FormData(form);
-
-      const response = await fetch(form.action, {
+    const response = await fetch(
+      "https://api.web3forms.com/submit",
+      {
         method: "POST",
         body: formData,
         headers: {
           Accept: "application/json"
         }
-      });
-
-      if (response.ok) {
-        status.textContent = "Message sent successfully! 🚀";
-        form.reset();
-      } else {
-        status.textContent =
-          "Message send nahi hua. Please try again.";
       }
-    } catch (error) {
-      console.error("Form error:", error);
+    );
 
+    const data = await response.json();
+
+    console.log("Web3Forms Response:", data);
+
+    if (data.success) {
+      status.textContent = "Message sent successfully! 🚀";
+      form.reset();
+    } else {
       status.textContent =
-        "Something went wrong. Please try again.";
+        data.message || "Web3Forms error occurred.";
     }
 
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Send Message";
-  });
-}
+  } catch (error) {
+    console.error("Error:", error);
+    status.textContent =
+      "Unable to send message.";
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Send Message";
+});
 
 // ============================
 // PRELOADER OPTIONAL
