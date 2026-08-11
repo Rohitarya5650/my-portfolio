@@ -380,16 +380,22 @@
       </div>
 
       <div class="contact-container">
-        <form class="contact-form" action="https://formspree.io/f/mqpzqlgl" method="POST">
-          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY" />
-
+        <form
+          class="contact-form"
+          action="https://formspree.io/f/mqpzqlgl"
+          method="POST"
+        >
           <input type="text" name="name" placeholder="Your Name" required />
 
           <input type="email" name="email" placeholder="Your Email" required />
 
           <input type="text" name="subject" placeholder="Subject" required />
 
-          <textarea name="message" placeholder="Your Message" required ></textarea>
+          <textarea
+            name="message"
+            placeholder="Your Message"
+            required
+          ></textarea>
 
           <button type="submit" class="btn primary-btn">Send Message</button>
         </form>
