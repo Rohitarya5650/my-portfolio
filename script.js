@@ -773,14 +773,22 @@ const canvas = document.getElementById("clockCanvas");
 
       // Visitor Counter
 
-      fetch('https://api.countapi.xyz/hit/rohit-arya-portfolio-2024/visits')
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('visitor-count').textContent = String(data.value).padStart(5, '0');
-      })
-      .catch(() => {document.getElementById('visitor-count').textContent = '00001';
-      });
+    const visitorCount = document.getElementById('visitor-count');
 
+fetch('https://countapi.mileshilliard.com/api/v1/hit/rohit-arya-portfolio-visits')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    visitorCount.textContent = String(data.value).padStart(5, '0');
+  })
+  .catch(error => {
+    console.error('Visitor counter error:', error);
+    visitorCount.textContent = 'Error';
+  });
 
       
 
