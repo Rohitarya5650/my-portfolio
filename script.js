@@ -569,36 +569,28 @@ update();
 //====================
 // Testimonials Slider
 //====================
-let current=0;
 
-const testimonials=
-document.querySelectorAll(".testimonial");
+let current = 0;
 
-setInterval(()=>{
+const testimonials = document.querySelectorAll(".testimonial");
 
-testimonials[current]
-.classList.remove("active");
+// Slider tabhi chalao jab kam se kam 2 testimonials hon
+if (testimonials.length > 1) {
+  // Ensure exactly one testimonial is active initially
+  testimonials.forEach((testimonial, index) => {
+    testimonial.classList.toggle("active", index === 0);
+  });
 
-current=
-(current+1)%testimonials.length;
+  setInterval(() => {
+    testimonials[current].classList.remove("active");
 
-testimonials[current]
-.classList.add("active");
+    current = (current + 1) % testimonials.length;
 
-},3000);
+    testimonials[current].classList.add("active");
+  }, 3000);
+}
 
 
-//======
-//toggle
-//======
-const toggle =
-document.getElementById("theme-toggle");
-
-toggle.addEventListener("click",()=>{
-
-document.body.classList.toggle("light");
-
-});
 
 //============
 //3D Tilt Cards
@@ -649,19 +641,6 @@ move:{speed:2}
 // ).style.display="none";
 
 // }
-
-
-
-
-
-//===========================
-//project show & hidden button
-//===========================
-function showAll() {
-  document.querySelectorAll('.project-card.hidden')
-    .forEach(c => c.classList.remove('hidden'));
-  document.getElementById('viewAllBtn').style.display = 'none';
-}
 
 
 
@@ -771,33 +750,51 @@ const canvas = document.getElementById("clockCanvas");
       drawClock();
       
 
-      // Visitor Counter
+      // Visitor Counter — counts only real, unique visitors.
+    // NOT counted: you (owner), localhost/file testing, bots, repeat visits from the same browser.
+    // Owner setup (once per browser/device): open  https://YOUR-SITE/?owner=1
+    // To undo:                                      https://YOUR-SITE/?owner=0
+    (function () {
+      const out = document.getElementById("visitor-count");
+      const BASE = "https://countapi.mileshilliard.com/api/v1";
+      const KEY = "rohit-arya-portfolio-visits";
+      const store = {
+        get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+        set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+        del: (k) => { try { localStorage.removeItem(k); } catch (e) {} }
+      };
 
-    const visitorCount = document.getElementById('visitor-count');
+      const flag = new URLSearchParams(location.search).get("owner");
+      if (flag === "1") store.set("portfolio_owner", "1");
+      if (flag === "0") store.del("portfolio_owner");
 
-fetch('https://countapi.mileshilliard.com/api/v1/hit/rohit-arya-portfolio-visits')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    visitorCount.textContent = String(data.value).padStart(5, '0');
-  })
-  .catch(error => {
-    console.error('Visitor counter error:', error);
-    visitorCount.textContent = 'Error';
-  });
+      const isOwner = store.get("portfolio_owner") === "1";
+      const h = location.hostname;
+      const isLocal =
+        location.protocol === "file:" ||
+        h === "" || h === "localhost" || h === "127.0.0.1" || h === "::1" ||
+        /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(h);
+      const isBot =
+        navigator.webdriver ||
+        /bot|crawl|spider|slurp|headless|lighthouse|preview|facebookexternalhit/i.test(navigator.userAgent);
+      const alreadyCounted = store.get("portfolio_counted") === "1";
 
-      
+      const shouldCount = !isOwner && !isLocal && !isBot && !alreadyCounted;
 
-
-
-
-
-
-
+      fetch(`${BASE}/${shouldCount ? "hit" : "get"}/${KEY}`)
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP error: ${r.status}`);
+          return r.json();
+        })
+        .then((data) => {
+          if (shouldCount) store.set("portfolio_counted", "1");
+          out.textContent = String(data.value).padStart(5, "0");
+        })
+        .catch((err) => {
+          console.error("Visitor counter error:", err);
+          out.textContent = "—";
+        });
+    })();
 
       //=============
       //auto slider
@@ -974,3 +971,11 @@ const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 revealEls.forEach(el => revealObserver.observe(el));
+
+// Hamburger: keyboard accessible
+menuBtn.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    menuBtn.click();
+  }
+});

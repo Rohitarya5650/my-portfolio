@@ -1,0 +1,42 @@
+# Takes the client screenshots IN THE CLOUD (GitHub's servers have full internet access,
+# so no local browser / DNS problems) and commits them to your repo.
+#
+# Use:  GitHub repo -> Actions tab -> "Capture client screenshots" -> Run workflow
+#       (leave "slug" empty for ALL clients in tools/sites.json, or type one slug).
+# If your repo root is the parent folder of `my-portfolio`, uncomment the working-directory lines.
+name: Capture client screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Only this client slug (empty = all clients in tools/sites.json)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: my-portfolio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install tools
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+      - name: Capture screenshots
+        run: node tools/capture-all.mjs ${{ github.event.inputs.slug }}
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/client-work js/screenshots-manifest.js
+          git diff --cached --quiet || (git commit -m "Update client work screenshots" && git push)

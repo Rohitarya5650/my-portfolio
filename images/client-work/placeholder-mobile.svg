@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="5400" viewBox="0 0 390 5400">
+<rect width="390" height="5400" fill="#eef1f5"/>
+<rect width="390" height="64" fill="#d5dae2"/><rect x="15.6" y="19.2" width="46.8" height="25.6" rx="6" fill="#aeb6c3"/>
+<rect x="312.0" y="24.32" width="46.8" height="15.36" rx="5" fill="#b8c0cc"/>
+<rect x="15.6" y="84.0" width="358.8" height="810.0" rx="14" fill="#dde2ea"/>
+<rect x="31.2" y="192.0" width="156.0" height="64.8" rx="6" fill="#aeb6c3"/>
+<rect x="31.2" y="300.0" width="234.0" height="43.2" rx="4" fill="#c3cad5"/>
+<rect x="31.2" y="435.0" width="327.59999999999997" height="378.00000000000006" rx="10" fill="#cfd5de"/>
+<rect x="15.6" y="1002.0000000000001" width="358.8" height="810.0" rx="14" fill="#e6eaf0"/>
+<rect x="31.2" y="1110.0" width="156.0" height="64.8" rx="6" fill="#aeb6c3"/>
+<rect x="31.2" y="1218.0" width="234.0" height="43.2" rx="4" fill="#c3cad5"/>
+<rect x="31.2" y="1353.0" width="327.59999999999997" height="378.00000000000006" rx="10" fill="#cfd5de"/>
+<rect x="15.6" y="1920.0000000000002" width="358.8" height="810.0" rx="14" fill="#dde2ea"/>
+<rect x="31.2" y="2028.0000000000002" width="156.0" height="64.8" rx="6" fill="#aeb6c3"/>
+<rect x="31.2" y="2136.0" width="234.0" height="43.2" rx="4" fill="#c3cad5"/>
+<rect x="31.2" y="2271.0" width="327.59999999999997" height="378.00000000000006" rx="10" fill="#cfd5de"/>
+<rect x="15.6" y="2838.0000000000005" width="358.8" height="810.0" rx="14" fill="#e6eaf0"/>
+<rect x="31.2" y="2946.0000000000005" width="156.0" height="64.8" rx="6" fill="#aeb6c3"/>
+<rect x="31.2" y="3054.0000000000005" width="234.0" height="43.2" rx="4" fill="#c3cad5"/>
+<rect x="31.2" y="3189.0000000000005" width="327.59999999999997" height="378.00000000000006" rx="10" fill="#cfd5de"/>
+<rect x="15.6" y="3756.0000000000005" width="358.8" height="810.0" rx="14" fill="#dde2ea"/>
+<rect x="31.2" y="3864.0000000000005" width="156.0" height="64.8" rx="6" fill="#aeb6c3"/>
+<rect x="31.2" y="3972.0000000000005" width="234.0" height="43.2" rx="4" fill="#c3cad5"/>
+<rect x="31.2" y="4107.0" width="327.59999999999997" height="378.00000000000006" rx="10" fill="#cfd5de"/>
+<rect y="4968.0" width="390" height="432.0" fill="#aeb6c3"/>
+<g transform="translate(195.0,2160.0) rotate(-12)" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700"><text font-size="25" fill="#e63946" fill-opacity=".85">PLACEHOLDER</text><text y="23" font-size="14" fill="#4a5568">Replace with your real full-page screenshot</text></g>
+<text x="195.0" y="64.0" dy="39.68" text-anchor="middle" font-family="Arial" font-size="14" fill="#4a5568">TOP · header / navigation</text>
+<text x="195.0" y="5211.0" text-anchor="middle" font-family="Arial" font-size="14" fill="#fff">BOTTOM · footer</text>
+</svg>

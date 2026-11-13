@@ -1,0 +1,13 @@
+{
+  "name": "my-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "screenshots": "node tools/capture-all.mjs",
+    "add-client": "node tools/add-client.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0",
+    "sharp": "^0.33.0"
+  }
+}
