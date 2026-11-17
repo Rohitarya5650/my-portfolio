@@ -44,16 +44,56 @@ window.CLIENT_SHOTS = ${JSON.stringify(obj, null, 2)};
 }
 
 // Scroll slowly so lazy images and reveal-on-scroll animations render, then go back to top.
+// Wrapped in try/catch: some sites redirect or reload when they detect a mobile/tablet
+// viewport, which destroys the page mid-scroll ("Execution context was destroyed"). If that
+// happens we just wait for the new page to settle and take the screenshot without scrolling.
 async function warmUp(page) {
-  await page.evaluate(async () => {
-    const step = Math.round(innerHeight * 0.6);
-    for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
-      scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 250));
-    }
-    scrollTo(0, 0);
-  });
-  await page.waitForTimeout(800);
+  try {
+    await page.evaluate(async () => {
+      const step = Math.round(innerHeight * 0.6);
+      for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
+        scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 250));
+      }
+      scrollTo(0, 0);
+    });
+    await page.waitForTimeout(800);
+  } catch (e) {
+    await page.waitForLoadState("load").catch(() => {});
+    await page.waitForTimeout(1200);
+  }
+}
+
+// Many sites use "scroll reveal" animations (AOS, WOW.js, custom IntersectionObservers) that
+// fade an element in ONLY while it is in the viewport, and fade it back out once it scrolls
+// away. A full-page screenshot renders the WHOLE page at once, so anything that is not in the
+// small original viewport right now (the footer, a mid-page section, sometimes part of a logo)
+// gets captured in its hidden/transparent state, looking like white/blank gaps. This forces
+// every element into its final, fully-visible state and turns off transitions before the
+// screenshot is taken, so the full page shows exactly how a human sees it while scrolling.
+async function forceRevealAnimations(page) {
+  await page.addStyleTag({
+    content: `
+      *, *::before, *::after { animation-play-state: paused !important; animation-delay: 0s !important;
+        transition: none !important; }
+      [data-aos] { opacity: 1 !important; transform: none !important; }
+      [class*="animate"], [class*="reveal"], [class*="fade"], [class*="aos-init"],
+      [style*="opacity: 0"], [style*="opacity:0"] { opacity: 1 !important; }
+      [style*="visibility: hidden"], [style*="visibility:hidden"] { visibility: visible !important; }
+    `,
+  }).catch(() => {});
+  await page.evaluate(() => {
+    document.querySelectorAll("[data-aos]").forEach((el) => el.classList.add("aos-animate", "aos-init"));
+    document.querySelectorAll("*").forEach((el) => {
+      const cs = getComputedStyle(el);
+      if (cs.opacity === "0") el.style.setProperty("opacity", "1", "important");
+      if (cs.visibility === "hidden") el.style.setProperty("visibility", "visible", "important");
+      if (cs.transform && cs.transform !== "none" && /translate/.test(el.className || "")) {
+        el.style.setProperty("transform", "none", "important");
+      }
+    });
+  }).catch(() => {});
+  await page.waitForTimeout(250);
 }
 
 // Uses Playwright's Chromium if installed, otherwise falls back to the Chrome or Edge
@@ -75,7 +115,7 @@ for (const site of todo) {
   console.log(`\n▶ ${site.slug}  ${site.url}`);
   const shots = {};
   for (const v of VIEWPORTS) {
-    let png, height, scale = v.scale;
+    let png = null, height, scale = v.scale;
     for (;;) { // if the 2x image is too tall for WebP, retry at 1x
       const ctx = await browser.newContext({
         viewport: { width: v.width, height: v.height }, deviceScaleFactor: scale,
@@ -84,27 +124,36 @@ for (const site of todo) {
       const page = await ctx.newPage();
       try {
         await page.goto(site.url, { waitUntil: "networkidle", timeout: 60000 });
+        if (site.hide?.length) await page.addStyleTag({ content: `${site.hide.join(",")}{display:none!important}` }).catch(() => {});
+        await page.waitForTimeout(site.wait ?? 1000);
+        await warmUp(page);
+        await forceRevealAnimations(page);
+        png = await page.screenshot({ fullPage: true, type: "png" });
+        ({ height } = await sharp(png).metadata());
       } catch (e) {
-        console.error(`  ✗ could not open ${site.url}: ${e.message.split("\n")[0]}`);
-        await ctx.close(); png = null; break;
+        console.error(`  ✗ ${v.key}: ${e.message.split("\n")[0]}`);
+        png = null;
+      } finally {
+        await ctx.close().catch(() => {});
       }
-      if (site.hide?.length) await page.addStyleTag({ content: `${site.hide.join(",")}{display:none!important}` });
-      await page.waitForTimeout(site.wait ?? 1000);
-      await warmUp(page);
-      png = await page.screenshot({ fullPage: true, type: "png" });
-      ({ height } = await sharp(png).metadata());
-      await ctx.close();
-      if (height <= 16383 || scale === 1) break;
-      scale = 1;
+      if (!png || height <= 16383 || scale === 1) break;
+      scale = 1; // retry once at normal resolution before giving up on this viewport
     }
-    if (!png) break;
+    if (!png) continue; // this viewport failed — skip it, still try the others
     const base = `${OUT}/${site.slug}-${v.key}`;
     const ext = height <= 16383 ? "webp" : "jpg";
     await (ext === "webp" ? sharp(png).webp({ quality: 85, effort: 5 }) : sharp(png).jpeg({ quality: 85, mozjpeg: true })).toFile(`${base}.${ext}`);
     shots[v.key] = `./${base}.${ext}`;
     console.log(`  ✓ ${v.key.padEnd(7)} ${base}.${ext}  (${height}px tall)`);
   }
-  if (Object.keys(shots).length === VIEWPORTS.length) manifest[site.slug] = shots;
+  if (Object.keys(shots).length) {
+    manifest[site.slug] = { ...manifest[site.slug], ...shots }; // keep any viewport captured earlier if this run only redid some
+    if (Object.keys(shots).length < VIEWPORTS.length) {
+      console.log(`  ⚠ ${site.slug}: only ${Object.keys(shots).length}/${VIEWPORTS.length} viewports captured. Re-run \`node tools/capture-all.mjs ${site.slug}\` to retry the rest.`);
+    }
+  } else {
+    console.error(`  ✗ ${site.slug}: no screenshots captured at all — check the URL in tools/sites.json.`);
+  }
 }
 await browser.close();
 writeManifest(manifest);

@@ -1,8 +1,26 @@
 [
   {
     "slug": "stone-bazar",
-    "url": "https://stonebazaarindia.com/index.html",
+    "url": "https://stonebazaarindia.com",
     "hide": [],
     "wait": 1500
+  },
+  {
+    "slug": "csp-coaching",
+    "url": "YOUR_CSP_WEBSITE_URL",
+    "hide": [],
+    "wait": 2000
+  },
+  {
+    "slug": "dharmendra-video-editor",
+    "url": "https://dharmendra-portfolio-web.netlify.app",
+    "hide": [],
+    "wait": 1500
+  },
+  {
+    "slug": "infino",
+    "url": "YOUR_INFINO_WEBSITE_URL",
+    "hide": [],
+    "wait": 2000
   }
 ]

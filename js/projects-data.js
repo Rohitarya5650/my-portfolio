@@ -41,7 +41,7 @@ window.PORTFOLIO_DATA = {
   clientWork: [
     {
       slug: "stone-bazar", // matches tools/sites.json
-      name: "Stone Bazar India",
+      name: "Stone Bazaar India",
       description:
         "A modern, responsive website for a digital marketing agency, presenting SEO, social media, Google Ads, content, web development and branding services with a clear path to enquiry.",
       tech: ["HTML5", "CSS3", "JavaScript"], // TODO: confirm stack
@@ -70,7 +70,7 @@ window.PORTFOLIO_DATA = {
       placeholder: true
     },
     {
-      slug: "dharmendra",
+      slug: "dharmendra-video-editor",
       name: "Dharmendra | Video Editor Portfolio",
       description:
         "A cinematic, responsive portfolio website for a video editor, designed so the creative work stands out and visitors get a smooth browsing experience.",
